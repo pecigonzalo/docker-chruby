@@ -1,0 +1,30 @@
+language: bash
+services: docker
+
+env:
+  matrix:
+  - VERSION=2.3 TAG=latest
+  - VERSION=2.3 TAG=2.3
+  - VERSION=2.2 TAG=2.2
+  - VERSION=2.1 TAG=2.1
+  global:
+  - REPO=pecigonzalo/chruby
+  - secure: LQ5pfC3NRvXR8Fl3WZYm1PXuFYL8dREH8cteYOUxmy37aJFbtvAbLU2o1qYXquHbM6BqbrKRoqEe8Am0wy8ZnDPT3K3i7FxVab79lQ69wgD9Py7Ix3SSKogmh4O9pNQs5IXijUWIrugiCt9i/hntRdgwj6Mxg2CxJev5Yn82+sOAnyq+Ye2VBULWdscFPP5dt0vM+OT7fdtOlnLVGTug6kwJTWl9es0D/RMpz7CXlRQJGnnUgT+tfwKH0A6n6k7ImPdbdjgJxg+3IzxlZwfakxkkYmN6qKpLzC6xlzom1gPDiNBBmkMYHsrS8DupRR2dLcZhPJvzpxfO0wqEJkt+t6ofHZFXH99VPoiZoEW4nc4QHdcFkGNSX03GJo2CmpXXIXCO7y/mzF/Bam0HeX4dDFl/aHj6yRgYLHiJwdQj8CqCDTz88bk35DdBnUtGn1H3jutoi+GVyHrR88x/XAS43rP3p8s5SPwrsPbWnD93rcM1dFmg0PUD0WaTNzdMPhx7EZCqsMfGBQcKrdcA5iBNwYDqKM86q4NVUv3G2XwqFouBBcgtIKQd0IQ3h/FVYaeoRi4QcwVd/JNRfxdMU6sAHQaHGxFlrIR8sIy53CeTDGfzwQzzKMHkQkVLXM5oAu12Fw/n+xitDMejaXUQnjfhABroZei3xQuwLG5xNUyyPsg=
+  - secure: SRlFUIIP285oLle/wqbbcrCf9qP6DCRuZUKDE9aoWGj0XJs5Jk1ixCVgIBTMvNQ6gp2fMdpRGfRNMYlDQ/KWg+K4TiYHx12aLVFAVJzgL3JQ1/DA//8VHEd6lAcUo1i/pNQim7No7tD0jLtcLcw7FRxJMZ6GHJDlh/ai6Z3GBg7pQjAYrtx/rGzhiJYEo4lRRyJaKUj+TxY5T0t/J1nvULeiza928Y3T2shfSRLV4kYYZROGGsbZySZ45zbAZbVewiMqMWNj2i+kGfrC2Fvj/ohiIWaRIOOSc5zU111T/RLFK+hltmlV0/z+D7gkM8L64YYFAkoEroLOwWtVzDVOqWIIoHqKHTlRsUWngk0sNsEFtjPwAjxssGzsYMfJxK/M16ue+nOO55g1A82/OxdtMro0dJJcf3Cc8ciCHnnwNDFuF60vqN6Msv3xPCjaCjNvZrQ+aTksrijzw3yJlTljYjLUPgV4Ue3YbcoVWIPxBKll1aKrmsMigrcrsesAV9CaSTBsFTUukHds0nillT4tPUoK1so2WY9GoYE6+n/rP8pG1r+rHuL8myRGudl8Qw7uzX7AwbYKn5X7xA30l92xovEPVHXuXK8aRnYK+VimTjzqKy0fxwRNzgWHwWuBGV3J6hDnV/5qa284TrE2hjIpNTPiv8VLMXUtGBZsrUVz0E8=
+  - secure: X+L1VQejJTTRwiHaANxmZ5bRXMY0G5ZZxTQpqChlfx5gdkMGd8cN3JZ/H7tmvLHQR66i5PizA1HaOCk+vkuDwRHGG8wFyRU2HFJFlmJTgMwQBlKBNmtvC9X+50ZSykVphahvXbMeM9Udox+fTlTNDlMLhO7HwiBBj1Bd5Hej8NORgNG3vSyV6+6CpXGUOdLKFmAO/KGMSPrJO1kkhdtktU8xbUvTF+22NuLa+kBbUg/qsLvZwlkuuavWReRZZp8KN4PeiyFMDUWtOBT6r9+HFMBsx60MLu6m3V11EieDQF28k0uEybzimsK16nOP4GQaemlyVxCzhlVivFSCJ3coCMNrQSR9QsayUhh1XCFE/Pwk+0O3FjUt0b4x3SxWPHVQuQfNrTTuqY0fiwynDzqoXArCCunw801dLaID4+g9ajvJBnf9IaU15sin/IXrg46wE7MrM0/Jc3PydNK34lgWry+lkeoLbMnSOe3Q/NaRWtc1Hia1jhVI22mIPTN6uxIrGxvfbAw3IYzBQpDXrPxHW91OXarmKqYIkuVEaW8eE5noawQouG6NTaIIi0B5SKhnsAzwiM6OXmVJxShBc0Tc/umGGB1G9awQ+Od3JwWMOSopv3Os7BTkcvh/MKUWtJy77QQ/d1FPzI21dszcfjJFRV6ZO4m9mMp8xfj8AZpIWrw=
+
+install:
+  - git clone https://github.com/docker-library/official-images.git /tmp/official-images
+
+before_script:
+- env | sort
+
+script:
+- docker build -t "$REPO:$TAG" --build-arg VERSION=$VERSION .
+- /tmp/official-images/test/run.sh "$REPO:$TAG" -c /tmp/official-images/test/config.sh -c ./test/config.sh
+
+after_script:
+- docker images
+- docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+- docker tag $REPO:$TAG $REPO:$TAG
+- docker push $REPO
