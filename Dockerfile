@@ -50,7 +50,8 @@ RUN echo '[ -n "$BASH_VERSION" ] || [ -n "$ZSH_VERSION" ] || return' \
     >> /etc/profile.d/chruby.sh && \
     echo 'source /usr/local/share/chruby/chruby.sh' \
     >> /etc/profile.d/chruby.sh && \
-    mkdir -p $GEM_HOME && \
+    mkdir -p "$GEM_HOME" "$BUNDLE_BIN" && \
+	  chmod 777 "$GEM_HOME" "$BUNDLE_BIN" && \
     gem install bundler
 
 CMD ["irb"]
